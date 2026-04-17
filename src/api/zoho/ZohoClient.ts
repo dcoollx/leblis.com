@@ -31,7 +31,7 @@ export class ZohoClient {
 
 
         this.axiosInstance = axios.create({
-            baseURL: 'https://www.zohoapis.com/crm/v3',
+            baseURL: 'https://www.zohoapis.com/Bigin/v2',
             headers: {
                  Authorization: `Zoho-oauthtoken $`, // initial empty token, will be set by the interceptor after refreshing
                 'Content-Type': 'application/json',
@@ -86,10 +86,10 @@ export class ZohoClient {
     }
 
     async createContact(newContatct: ZohoContact) {
-        return this.axiosInstance.post('https://www.zohoapis.com/crm/v3/Contacts', newContatct);
+        return this.axiosInstance.post('/Contacts', newContatct);
     }
 
     async getProducts() {
-        return this.axiosInstance.get('https://www.zohoapis.com/crm/v3/Products');
+        return this.axiosInstance.get('/Products'); // only gets first 200 products
     }
 }

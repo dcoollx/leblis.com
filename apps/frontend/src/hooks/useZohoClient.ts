@@ -1,15 +1,14 @@
-import { ZohoClient } from '../api/zoho/ZohoClient'
+import { ZohoClient } from "../api/zoho/ZohoClient";
+import { useMemo } from "react";
+
+
 
 export const useZohoClient = () => {
-    const { grant_type, client_id, client_secret, refresh_token } = process.env;
-    if(!grant_type || !client_id || !client_secret || !refresh_token) {
-        throw new Error('Missing Zoho API credentials in environment variables');
-    }
-    const zohoClient = new ZohoClient({
-        grant_type,
-        client_id,
-        client_secret,
-        refresh_token,
-    });
+    // memoize the ZohoClient instance to avoid creating a new instance on every render
+    const zohoClient = useMemo(() => {
+        
+        const client = new ZohoClient();
+        return client;
+    }, []);
     return zohoClient;
-}
+} 

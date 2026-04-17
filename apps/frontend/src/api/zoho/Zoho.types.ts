@@ -24,3 +24,10 @@ export interface ZohoContact {
 			"Mailing_Zip": string
 }
 
+export interface ZohoProduct {
+               Product_Name: string,
+               Product_Code?: string,
+               Description: string,
+               Unit_Price: number,
+               Image?: string,
+}

@@ -30,9 +30,9 @@ export class ZohoClient {
     }
 
     async createContact(newContatct: Partial<ZohoContact>) {
-        return this.axiosInstance.post('/contacts', newContatct);
+        return this.axiosInstance.post('/contacts', newContatct).then((response) => response.data);
     }
       async getProducts(): Promise<ZohoProduct[]> {
-        return this.axiosInstance.get('/products'); // only gets first 200 products
+        return this.axiosInstance.get('/products').then((response) => response.data); // only gets first 200 products
     }
 }

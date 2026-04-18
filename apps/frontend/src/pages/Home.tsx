@@ -1,46 +1,10 @@
 import { motion } from "motion/react";
-import { ProductCard } from "./components/ProductCard";
 import { ShoppingBag } from "lucide-react";
+import { ProductList } from "../components/ProductList";
+import { Hero } from "../components/Hero";
 
-export default function App() {
-  const products = [
-    {
-      name: "Lavender Dreams",
-      price: "$24",
-      image: "https://images.unsplash.com/photo-1765964492963-b0aa8c172431?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      description: "Calming lavender body butter"
-    },
-    {
-      name: "Citrus Bliss",
-      price: "$22",
-      image: "https://images.unsplash.com/photo-1693004926638-d2e47d705229?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      description: "Refreshing citrus whipped cream"
-    },
-    {
-      name: "Vanilla Silk",
-      price: "$26",
-      image: "https://images.unsplash.com/photo-1762840192336-575fba31d28c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      description: "Rich vanilla body butter"
-    },
-    {
-      name: "Rose Petal",
-      price: "$28",
-      image: "https://images.unsplash.com/photo-1626704377346-7453fc9bd17f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      description: "Delicate rose-infused lotion"
-    },
-    {
-      name: "Mint Refresh",
-      price: "$23",
-      image: "https://images.unsplash.com/photo-1655717676040-26209d5b9884?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      description: "Cooling mint body cream"
-    },
-    {
-      name: "Honey Glow",
-      price: "$25",
-      image: "https://images.unsplash.com/photo-1620740168096-d48b4ac47165?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      description: "Nourishing honey butter"
-    }
-  ];
+export const Home = () => {
+   
 
   return (
     <div className="min-h-screen bg-[#faf9f7]">
@@ -66,52 +30,7 @@ export default function App() {
       </header>
 
       {/* Hero */}
-      <section className="relative h-[calc(100svh-73px)] mt-[73px] flex items-center justify-center overflow-hidden">
-        <motion.div
-          className="absolute inset-0"
-          initial={{ scale: 1.1, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <img
-            src="https://images.pexels.com/photos/12516060/pexels-photo-12516060.jpeg"
-            alt="Natural skincare"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#faf9f7]/40" />
-        </motion.div>
-
-        <div className="relative z-10 text-center px-6 max-w-3xl">
-          <motion.h2
-            className="text-7xl md:text-8xl lg:text-9xl mb-6 text-[#2a2825]"
-            style={{ fontFamily: "'Cormorant', serif", fontStyle: "italic", fontWeight: 600 }}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          >
-            le blis
-          </motion.h2>
-          <motion.p
-            className="text-xl text-[#2a2825] mb-8 tracking-wide"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          >
-            Handcrafted lotions and butters for radiant skin
-          </motion.p>
-          <motion.button
-            className="bg-[#2a2825] text-[#faf9f7] px-8 py-3 hover:bg-[#3d3834] transition-colors"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            Shop Collection
-          </motion.button>
-        </div>
-      </section>
+      <Hero />
 
       {/* Featured Products */}
       <section className="max-w-7xl mx-auto px-6 py-24">
@@ -132,18 +51,7 @@ export default function App() {
             Each product is carefully handcrafted with natural ingredients to nourish and pamper your skin
           </p>
         </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-          {products.map((product, index) => (
-            <ProductCard
-              key={index}
-              name={product.name}
-              price={product.price}
-              image={product.image}
-              description={product.description}
-            />
-          ))}
-        </div>
+    <ProductList />
       </section>
 
       {/* About */}
@@ -245,5 +153,5 @@ export default function App() {
         </div>
       </footer>
     </div>
-  );
+  ); 
 }

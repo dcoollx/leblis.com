@@ -25,7 +25,7 @@ aws cloudformation deploy \
 
 # capture lambda function url from stack then update frontend config with it
 export VITE_API_URL=$(aws cloudformation describe-stacks --stack-name "$Site-stack" --query "Stacks[0].Outputs[?OutputKey=='LambdaAPIUrl'].OutputValue" --output text)  
- echo aws cloudformation describe-stacks --stack-name "$Site-stack" --query "Stacks[0].Outputs[?OutputKey=='Nameservers'].OutputValue" --output text  
+echo aws cloudformation describe-stacks --stack-name "$Site-stack" --query "Stacks[0].Outputs[?OutputKey=='Nameservers'].OutputValue" --output text  
   #upload site to s3 bucket
 cd apps/frontend && npm run build
 #empty the bucket before uploading new files
@@ -34,7 +34,7 @@ aws s3 rm s3://"$Site-stack-hosting-bucket" --recursive
 aws s3 sync dist/ s3://"$Site-stack-hosting-bucket" --delete 
 
 #call update function to populate products on first deploy
-curl -X POST "$VITE_API_URL/update"
+curl -X POST "$VITE_API_URL"update"
 
 ## set up notification for change in products to hit the lambda function update url.
 #need a new scope for this: ZohoBigin.notifications.ALL
@@ -43,9 +43,13 @@ curl -X POST https://zohoapis.com/bigin/v2/actions/watch \
   -H "Authorization: Zoho-oauthtoken $tempToken" \
   -H "Content-Type: application/json" \
   -d '{
-    "notify_url": "https://'"$VITE_API_URL"'/update",
-    "events": [
-        "Products.ALL"
-    ],
-    "channel_id": "'"$Site"'"
-}'
+    "watch": [
+       {
+            "channel_id": "$Site",
+            "events": [
+                "Products.all"
+            ],
+            "token": "${Site}",
+            "notify_url": "'$VITE_API_URL'update"
+        }]
+      }'

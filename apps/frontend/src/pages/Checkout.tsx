@@ -1,16 +1,8 @@
-import { loadStripe } from '@stripe/stripe-js';
-
-const isProduction = import.meta.env.PROD
-let stripeKey = '';
-if(isProduction) {
-    stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
-}
-else {
-    stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY_TEST
-}
-const stripe = loadStripe(stripeKey)
+import { useShoppingCartSession } from "../hooks/useShoppingCartSession";
 
 export const Checkout = () => {
+    const { mutate: createShoppingCartSession } = useShoppingCartSession();
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-stone-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8">

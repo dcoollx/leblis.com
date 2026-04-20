@@ -31,7 +31,7 @@ export function ProductCard({ name, price, image, description }: ProductCardProp
       <div className="space-y-1">
         <h3 className="text-[#2a2825]">{name}</h3>
         <p className="text-sm text-[#6b6560]">{description}</p>
-        <p className="text-[#2a2825] mt-2">${price}</p>
+        <p className="text-[#2a2825] mt-2">{price}</p>
       </div>
     </motion.div>
   );

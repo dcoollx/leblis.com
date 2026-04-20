@@ -2,10 +2,14 @@ import { ShoppingBag, Plus, Minus, X, ShoppingCart } from "lucide-react"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 import { Button } from "./ui/button"
 import { useShoppingCart } from "use-shopping-cart"
+import { useShoppingCartSession } from "../hooks/useShoppingCartSession"
 
 export const Shoppingcart = () => {
+    const { mutate: createShoppingCartSession } = useShoppingCartSession();
     const { cartCount, cartDetails, formattedTotalPrice, decrementItem, incrementItem, removeItem } = useShoppingCart()
-    if(!cartDetails) return null
+    if(!cartDetails) return null;
+
+
 
     const items = Object.entries(cartDetails)
     const isEmpty = items.length === 0
@@ -112,11 +116,9 @@ export const Shoppingcart = () => {
                                 <span className="text-lg font-medium text-stone-900">{formattedTotalPrice}</span>
                             </div>
                             <p className="text-xs text-stone-400">Shipping & taxes calculated at checkout</p>
-                            <a href="/checkout">
-                                <Button className="w-full bg-stone-900 hover:bg-stone-800 text-white h-11 rounded-full font-medium">
+                            <Button onClick={(_)=>{createShoppingCartSession(cartDetails)}} className="w-full bg-stone-900 hover:bg-stone-800 text-white h-11 rounded-full font-medium">
                                     Continue to Checkout
-                                </Button>
-                            </a>
+                            </Button>
                             <button className="w-full text-sm text-stone-500 hover:text-stone-700 transition-colors">
                                 Continue Shopping
                             </button>

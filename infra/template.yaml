@@ -182,6 +182,7 @@ Resources:
           ZOHO_CLIENT_SECRET: !Ref ZOHOCLIENTSECRET
           ZOHO_ACCESS_TOKEN: !Ref ZOHOACCESSTOKEN
           ZOHO_REFRESH_TOKEN: !Ref ZOHOREFRESHTOKEN
+          STRIPE_SECRET_KEY: !Ref STRIPESECRETKEY
           TABLE_NAME: !Ref DataTable 
       Policies:
         - DynamoDBCrudPolicy:

@@ -14,6 +14,7 @@ import { Skeleton } from "./ui/skeleton";
     if (!products || products.length === 0) {
       products = []
     }
+    console.log(products, 'products');
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
         {products.map((product: ZohoProduct) => (

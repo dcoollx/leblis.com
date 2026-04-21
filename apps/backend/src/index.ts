@@ -9,23 +9,23 @@ export const handler: APIGatewayProxyHandlerV2 = async (
   event: APIGatewayProxyEventV2,
   context: Context,
 ) => {
-  
+  let res;
   const {method, path } = event.requestContext.http;
   if(method === 'OPTIONS'){
     return respond(200, { message: 'OK' });
   }
-  await stripeHander(event, context);
+  res = await stripeHander(event, context);
   
   
   if(path === '/products'){
-    await productsHandler(event, context, method as HTTPMethods)
+    res = await productsHandler(event, context, method as HTTPMethods)
   }
   
   if(path === '/contacts'){
-    await contactHandler(event, context, method as HTTPMethods)
+    res = await contactHandler(event, context, method as HTTPMethods)
   }
-
-  return respond(404, { message: 'Not Found' });
+  if(!res) res = respond(404, { message: 'Not Found' });
+  return res;
   
 }
 

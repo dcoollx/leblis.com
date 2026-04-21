@@ -33,7 +33,7 @@ export const handler = async (
             return respond(400, { message: 'Invalid request body' });
         }
 
-        const cartDetails = JSON.parse(req.body);
+        const { cartDetails } = body
         const line_items = Object.values<CartDetails>(cartDetails).map((item) => ({
             price_data: {
                 currency: 'usd',

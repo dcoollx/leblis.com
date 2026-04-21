@@ -1,8 +1,8 @@
 import { APIGatewayProxyEventV2 } from "aws-lambda"
 import { Context } from "vm"
 import { getAccessToken, type HTTPMethods, respond } from "./utils"
-import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBClient, } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, PutCommand, ScanCommand} from "@aws-sdk/lib-dynamodb";
 export const productsHandler = async ( 
     req: APIGatewayProxyEventV2,
     _: Context,
@@ -147,5 +147,5 @@ if (method === 'GET') {
             return respond(500, { message: 'Error syncing with Zoho' });
           }
     }
-
+    return;
 }

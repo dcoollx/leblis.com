@@ -23,6 +23,9 @@ Parameters:
   ZOHOREFRESHTOKEN:
     Type: String
     NoEcho: true
+  STRIPESECRETKEY:
+    Type: String
+    NoEcho: true
 
 Conditions:
   EnableCustomDomain: !Equals [ !Ref UseCustomDomain, "true" ]

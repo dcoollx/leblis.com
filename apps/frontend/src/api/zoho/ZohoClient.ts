@@ -36,7 +36,7 @@ export class ZohoClient {
       async getProducts(): Promise<ZohoProduct[]> {
         return this.axiosInstance.get('/products').then((response) => response.data); // only gets first 200 products
     }
-    async getShoppingCartSession(cartDetails: CartDetails): Promise<{ sessionUrl: string }> {
+    async getShoppingCartSession(cartDetails: CartDetails): Promise<{ sessionUrl: string, id: string }> {
         return this.axiosInstance.post('/checkout', { cartDetails }).then((response) => response.data);
     }
 }

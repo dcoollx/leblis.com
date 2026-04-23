@@ -25,7 +25,11 @@ aws cloudformation deploy \
 
 
 # capture lambda function url from stack then update frontend config with it
-export VITE_API_URL=$(aws cloudformation describe-stacks --stack-name "$Site-stack" --query "Stacks[0].Outputs[?OutputKey=='LambdaAPIUrl'].OutputValue" --output text)  
+export VITE_API_URL=$(aws cloudformation describe-stacks --stack-name "$Site-stack" --query "Stacks[0].Outputs[?OutputKey=='LambdaAPIUrl'].OutputValue" --output text)
+
+# create stripe webhooks ( requires VITE_API_URL)
+npx tsx ./infra/webhooks.mts
+
 echo aws cloudformation describe-stacks --stack-name "$Site-stack" --query "Stacks[0].Outputs[?OutputKey=='Nameservers'].OutputValue" --output text  
   #upload site to s3 bucket
 cd apps/frontend && npm run build

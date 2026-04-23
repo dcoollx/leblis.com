@@ -10,7 +10,11 @@
     "apps/*"
   ],
   "dependencies": {
-    "@stripe/stripe-js": "^9.2.0",
     "use-shopping-cart": "^3.2.0"
+  },
+  "devDependencies": {
+    "dotenv": "^17.4.2",
+    "stripe": "^22.0.2",
+    "tsx": "^4.21.0"
   }
 }

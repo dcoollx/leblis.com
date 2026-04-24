@@ -1,5 +1,6 @@
-import { motion } from "motion/react";
+import { motion, rgba } from "motion/react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { PlusSquareIcon } from "lucide-react";
 
 interface ProductCardProps {
   name: string;
@@ -27,12 +28,28 @@ export function ProductCard({ name, price, image, description }: ProductCardProp
           alt={name}
           className="w-full h-full object-cover"
         />
+        <motion.div style={{
+          position: 'absolute',
+          bottom: '0px',
+          zIndex: 1000,
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          padding: '15px',
+          backgroundColor: rgba.transform({ red: 255, green: 255, blue: 255, alpha: 0.3})
+        }}>
+          <div>
+          <h3 className="text-[#2a2825]">{name}</h3>
+          <p className="text-sm text-[#6b6560]">{description}</p>
+          <p className="text-[#2a2825] mt-2">{price}</p>
+          </div>
+          <motion.div title="add to cart">
+            <PlusSquareIcon  />
+          </motion.div>
+        </motion.div>
+      
       </motion.div>
-      <div className="space-y-1">
-        <h3 className="text-[#2a2825]">{name}</h3>
-        <p className="text-sm text-[#6b6560]">{description}</p>
-        <p className="text-[#2a2825] mt-2">{price}</p>
-      </div>
     </motion.div>
   );
 }

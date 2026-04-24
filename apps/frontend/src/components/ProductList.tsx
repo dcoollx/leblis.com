@@ -26,6 +26,12 @@ import { Skeleton } from "./ui/skeleton";
             description: product.Description,
             sku: product.id,
             currency: 'USD',
+            product_data: {
+              zoho_product_id: product.id
+            },
+            metadata: {
+              zoho_product_id: product.id
+            }
           },{
             count: 1,
             product_metadata: {

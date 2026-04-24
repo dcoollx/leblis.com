@@ -37,6 +37,7 @@ export const handler = async (
         }
 
         const { cartDetails } = body
+        console.log(cartDetails, 'details')
         const line_items: LineItems = Object.values<CartEntry>(cartDetails).map((item) => ({
 
             price_data: {
@@ -47,9 +48,10 @@ export const handler = async (
                 },
                 unit_amount: item.price
             },
-            metadata: (item.product_data as any)?.metadata,
+            metadata: (item.product_data as any),
             quantity: item.quantity
             }))
+        console.log(line_items[0].metadata, 'metadata')
 
         const session = await (stripe as Stripe).checkout.sessions.create({
         mode: 'payment',

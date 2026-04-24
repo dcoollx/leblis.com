@@ -7,10 +7,22 @@ import {
 import dotenv from 'dotenv';
 
 
-dotenv.config()
+dotenv.config({path: '../../.env'})
 
 const app = express();
 app.use(express.json());
+
+app.get('/products', (req, res)=>{
+  return res.header( 'Access-Control-Allow-Origin', '*', ).header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT',).status(200).send([
+    {
+        "Product_Name": "Pink Sugar",
+        "photo": "https://plus.unsplash.com/premium_vector-1737035301774-79613c87d8bb?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "Unit_Price": 5,
+        "Description": "2 Oz",
+        "id": "7374418000000609049"
+    }
+])
+})
 
 app.all(/.*/, async (req: Request, res: Response) => {
   // Construct the V2 Event structure

@@ -5,7 +5,7 @@ import { useShoppingCart } from "use-shopping-cart"
 import { useShoppingCartSession } from "../hooks/useShoppingCartSession"
 
 export const Shoppingcart = () => {
-    const { mutate: createShoppingCartSession } = useShoppingCartSession();
+    const { mutate: createShoppingCartSession, isPending } = useShoppingCartSession();
     const { cartCount, cartDetails, formattedTotalPrice, decrementItem, incrementItem, removeItem } = useShoppingCart()
     if(!cartDetails) return null;
 
@@ -116,8 +116,8 @@ export const Shoppingcart = () => {
                                 <span className="text-lg font-medium text-stone-900">{formattedTotalPrice}</span>
                             </div>
                             <p className="text-xs text-stone-400">Shipping & taxes calculated at checkout</p>
-                            <Button onClick={(_)=>{createShoppingCartSession(cartDetails)}} className="w-full bg-stone-900 hover:bg-stone-800 text-white h-11 rounded-full font-medium">
-                                    Continue to Checkout
+                            <Button disabled={isPending} onClick={(_)=>{createShoppingCartSession(cartDetails)}} className="w-full bg-stone-900 hover:bg-stone-800 text-white h-11 rounded-full font-medium">
+                                    {isPending ? 'Creating Secure Connection' : 'Continue to Checkout'}
                             </Button>
                             <button className="w-full text-sm text-stone-500 hover:text-stone-700 transition-colors">
                                 Continue Shopping

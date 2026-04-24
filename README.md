@@ -21,7 +21,7 @@ This is a monorepo containing a React frontend, AWS Lambda backend, and CloudFor
 
 1. gen long lasting token:
     1. register app in api-zoho.com
-    1. goto `https://accounts.zoho.com/oauth/v2/auth?scope=ZohoBigin.modules.attachments.READ,ZohoBigin.notifications.ALL,ZohoBigin.modules.products.ALL,ZohoBigin.modules.contacts.WRITE&client_id=1000.T4OK2HQRCBW1WDE3QK34YX95496XHT&response_type=code&access_type=offline&redirect_uri=https://www.openlaunchworks.com//` EDit scope if more is needed
+    1. goto `https://accounts.zoho.com/oauth/v2/auth?scope=ZohoBigin.modules.pipelines.ALL,ZohoBigin.modules.attachments.READ,ZohoBigin.notifications.ALL,ZohoBigin.modules.products.ALL,ZohoBigin.modules.contacts.WRITE&client_id=1000.T4OK2HQRCBW1WDE3QK34YX95496XHT&response_type=code&access_type=offline&redirect_uri=https://www.openlaunchworks.com//` EDit scope if more is needed
     1. use postman to post https://accounts.zoho.com/oauth/v2/token with grant_code (60 secs till code expires)
     1. save resulting refresh code in env vars
 

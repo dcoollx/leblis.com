@@ -50,7 +50,9 @@ export const Success = () => {
 
             </div>
 
-            <Button onClick={(_)=>{window.location.href = '/'}} className="fixed bottom-2 right-2">Return To Shop</Button>
+            <Button onClick={(_)=>{
+                clearCart();
+                window.location.href = '/'}} className="fixed bottom-2 right-2">Return To Shop</Button>
         </div>
     )
 }

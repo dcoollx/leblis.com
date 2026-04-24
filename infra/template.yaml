@@ -194,6 +194,9 @@ Resources:
 Outputs:
   CloudFrontURL:
     Value: !GetAtt WebsiteDistribution.DomainName
+    
+  DistributionID:
+    Value: !GetAtt WebsiteDistribution.Id
   
   Nameservers:
     Description: "Copy these 4 values into your IONOS Nameserver settings"

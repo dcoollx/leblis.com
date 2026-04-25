@@ -1,18 +1,15 @@
 import { useEffect } from "react"
 import { useShoppingCart, formatCurrencyString } from "use-shopping-cart"
 import { Button } from "../components/ui/button"
+import { useParams } from "react-router"
 
 // page thanking customer for their order and showing order summary
 export const Success = () => {
-    const { formattedTotalPrice, clearCart, cartDetails } = useShoppingCart()
+    const { sesssion_id } = useParams()
+    const { formattedTotalPrice, clearCart, cartDetails, } = useShoppingCart()
     useEffect(()=>{
         // add unload event
-        const unload = (e: BeforeUnloadEvent)=>{
-            e.preventDefault()
             clearCart();
-        }
-         window.addEventListener('beforeunload', unload)
-        return window.removeEventListener('beforeunload', unload);
     }, [])
     return (
         <div className="min-h-screen flex items-center justify-center bg-stone-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -23,7 +20,7 @@ export const Success = () => {
                 </div>
                 <div className="bg-white shadow rounded-lg p-6">
                     <h2 className="text-lg font-medium text-stone-900 mb-4">Order Summary</h2>
-                    <ul className="divide-y divide-stone-200">
+                    {/* <ul className="divide-y divide-stone-200">
                         <li className="py-2">
                             <span className="text-stone-600">Order ID:</span>
                             <span className="font-medium">1</span>
@@ -45,7 +42,7 @@ export const Success = () => {
                             <span className="text-stone-600">Total:</span>
                             <span className="font-medium">{formattedTotalPrice}</span>
                         </li>
-                    </ul>
+                    </ul> */}
                 </div>
 
             </div>

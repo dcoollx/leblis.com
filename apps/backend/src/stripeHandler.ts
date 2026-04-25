@@ -1,5 +1,4 @@
 import { APIGatewayProxyEventV2, Context } from "aws-lambda";
-const { getStripeClient } = await import(process.env.LOCAL ? './tests/mockedLayer' : "/opt/nodejs/index.js")
 import type { CartDetails, CartEntry } from "use-shopping-cart/core";
 import { respond } from "./utils";
 import Stripe from "stripe";
@@ -22,7 +21,7 @@ export const handler = async (
         console.warn('stripe key is missing')
         return respond(500, new Error('stripe key is missing'))
     }
-    const stripe = getStripeClient(process.env. STRIPE_SECRET_KEY!);
+    const stripe = new Stripe(process.env. STRIPE_SECRET_KEY!);
     const { method, path } = req.requestContext.http;
     // if the request is not for stripe, just return, allow rest of handlers
     if(method === 'POST'){
@@ -57,8 +56,17 @@ export const handler = async (
         mode: 'payment',
         line_items,
         customer_creation: 'always',
-        success_url: `${req.headers.origin}/success`,
-        cancel_url: req.headers.origin
+        success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: req.headers.origin,
+        shipping_address_collection: {
+            allowed_countries: ['US'],
+        },
+        name_collection: {
+            individual: {
+                optional: false,
+                enabled: true
+            }
+        }
         });
 
         return respond(200, { sessionUrl: session.url, id: session.id });

@@ -1,16 +1,29 @@
 import { APIGatewayProxyResult } from "aws-lambda";
 import type Stripe from "stripe";
 
-export const respond = (statusCode: number, body?: any, headers?: Record<string, string>): APIGatewayProxyResult => ({
+export const respond = (statusCode: number, payload?: any, headers?: Record<string, string>): APIGatewayProxyResult => {
+  let body = "{}"
+  if(payload){
+    try{
+      body = JSON.stringify(payload);
+    }
+    catch(e){
+      console.log('unable to stringify body')
+      body = "{}"
+    }
+  }
+
+  return {
     statusCode,
-    body: JSON.stringify(body),
+    body,
     headers: {
       ...headers,
       'Access-Control-Allow-Origin': '*', // change this to your frontend domain
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     },
-});
+  }
+};
 
 export type HTTPMethods = 'GET' | 'OPTION' | 'POST' | 'PUT';
 

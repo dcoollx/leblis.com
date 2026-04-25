@@ -1,9 +1,9 @@
 import { APIGatewayProxyEventV2, Context } from "aws-lambda";
 import {  HTTPMethods, mapStripeToBigin, respond } from "./utils";
+import {eventBr}
 import zoho, { ZOHODeal } from "./zoho.js";
 import crypto from 'crypto';
-import type Stripe from 'stripe';
-const { getStripeClient } = await import(process.env.LOCAL ? './tests/mockedLayer' : "/opt/nodejs/index.js")
+import Stripe from 'stripe';
 
 
 enum StripeEvents {
@@ -25,7 +25,7 @@ enum StripeEvents {
             console.warn('stripe key is missing')
             return respond(500, new Error('stripe key is missing'))
         }
-        const stripe = getStripeClient(stripeKey);
+        const stripe = new Stripe(stripeKey);
         
         if(method === 'POST'){
             let body;
@@ -49,25 +49,32 @@ enum StripeEvents {
                     .catch(()=>respond(400, {message: 'failed to add a contact to ZOHO'}))
             }
             case StripeEvents.checkout_complete: {
+                console.log('Being Checkout EVENT')
                 // create a new deal
                 const checkout = event.data.object as Stripe.Checkout.Session
                 const customerId = checkout.customer as string | null ;
                 if(!customerId){
                     return respond(400, {message: 'customer not found in event data'})
                 }
+                console.log('retrieving stripe customer')
                 const customer = await stripe.customers.retrieve(customerId);
                 if(customer.deleted){
                     return respond(200, {message: `customer was deleted on ${customer.lastResponse}`})
                 }
+                console.log('processing items')
                 const line_items = await (stripe as Stripe).checkout.sessions.listLineItems(checkout.id)
                 const products = line_items.data.map(({quantity,description, price, metadata })=>{
                     const id = metadata?.['zoho_product_id'] ?? ''
                     return { quantity, name: description, price, id }
             })
+            console.log('processed', products.length, 'items')
                 // may need to just find customer enstead of creating
                 const contact = mapStripeToBigin(customer);
-                const newCustomer = await zoho.createNewContact(contact)
+                const newCustomer = await zoho.createNewContact(contact);
+                console.log('Upsert zoho contact', newCustomer?.details?.id)
                 const orderNumber = crypto.randomUUID();
+                await (stripe as Stripe).checkout.sessions.update(checkout.id, { metadata: { orderNumber }});
+                console.log('adding order number to stripe')
                 const order: ZOHODeal = {
                     Deal_Name: `Order# ${orderNumber}`,
                     Pipeline: {
@@ -77,8 +84,8 @@ enum StripeEvents {
                     Closing_Date: new Date().toISOString().split('T')[0],
                     Sub_Pipeline: '7374418000000607001', // these can be found in url on zoho page
                     Stage: 'Order Received',
-                    Amount: checkout.amount_total ?? 0,
-                    Contact_Name: { id: newCustomer.details.id },
+                    Amount: (checkout.amount_total ?? 1) /100,
+                    Contact_Name: { id: '7374418000000621007' },
                     Associated_Products: products?.map(({quantity, name, price: List_Price, id })=>{
                         return {
                             Product: {
@@ -93,14 +100,9 @@ enum StripeEvents {
                 };
                 console.log('deal', JSON.stringify(order))
 
-                return zoho.createDeal(order)
-                .then(async resp=> {
-                    if(resp.ok){
-                        return respond(200, { message: 'created new order'}) 
-                    }
-                    const error_message = await resp.text()
-                    return respond(500, {service: 'ZOHO', error: error_message })
-            })
+                await zoho.createDeal(order);
+                console.log('new deal created, closing process')
+                return respond(200, {message: 'success'})
                 
 
             }

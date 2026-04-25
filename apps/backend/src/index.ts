@@ -29,7 +29,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (
     res = await contactHandler(event, context, method as HTTPMethods).catch(e=> respond(500, e))
   }
   if(path === '/stripe-webhook'){
-    res = await stripeWebhookHandler(event, context, method as HTTPMethods).catch(e=> respond(500, e))
+    res = await stripeWebhookHandler(event, context, method as HTTPMethods)
   }
   if(!res) res = respond(404, { message: 'Not Found' });
   return res;

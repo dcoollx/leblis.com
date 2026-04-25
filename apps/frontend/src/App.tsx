@@ -4,7 +4,6 @@ import { queryClient } from "./util/queryClient";
 import { CartProvider } from 'use-shopping-cart'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router';
 import { Checkout } from "./pages/Checkout";
-import { useEffect } from "react";
 import { Success } from "./pages/Success";
 
 

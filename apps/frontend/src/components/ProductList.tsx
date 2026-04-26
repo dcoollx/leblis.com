@@ -42,7 +42,7 @@ import { Skeleton } from "./ui/skeleton";
           <ProductCard
             name={product.Product_Name}
             price={formatCurrencyString({ value: product.Unit_Price * 100, currency: 'USD' })}
-            image={product.Image ?? 'https://placehold.co/300x200?text=No+Image'}
+            image={product.photo ?? 'https://placehold.co/300x200?text=No+Image'}
             description={product.Description}
           />
           </a>

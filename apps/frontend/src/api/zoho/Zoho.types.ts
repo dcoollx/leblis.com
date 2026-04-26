@@ -29,6 +29,6 @@ export interface ZohoProduct {
                Product_Code?: string,
                Description: string,
                Unit_Price: number,
-               Image?: string,
+               photo?: string,
 			   id: string
 }

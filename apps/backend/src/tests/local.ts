@@ -16,9 +16,10 @@ app.get('/products', (req, res)=>{
   return res.header( 'Access-Control-Allow-Origin', '*', ).header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT',).status(200).send([
     {
         "Product_Name": "Pink Sugar",
-        "photo": "https://plus.unsplash.com/premium_vector-1737035301774-79613c87d8bb?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "Image": "https://plus.unsplash.com/premium_photo-1675855748166-a66d26c3b6da?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGluayUyMHN1Z2FyfGVufDB8fDB8fHww",
         "Unit_Price": 5,
         "Description": "2 Oz",
+        Inventory: 1,
         "id": "7374418000000609049"
     }
 ])

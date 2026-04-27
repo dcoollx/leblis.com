@@ -1,24 +1,10 @@
 import zoho from './../zoho'
 import { DynamoDBClient, } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand, ScanCommand} from "@aws-sdk/lib-dynamodb";
- const client = new DynamoDBClient({});
-    const dynamodb = DynamoDBDocumentClient.from(client);
-        
-        const getProductImage = async (productId: string, accessToken: string): Promise<string> => {
-          return await fetch(`https://zohoapis.com/bigin/v2/Products/${productId}/photo`, {
-            headers: { 'Authorization': `Zoho-oauthtoken ${accessToken}` }
-          }).then(async (resp): Promise<string> => {
-              if(!resp.ok)
-                return Promise.reject(resp.status)
-              const imageBuffer = await resp.arrayBuffer();
-              const contentType = resp.headers.get('content-type') || 'image/png';
-              // You can now upload this buffer to S3 or convert to Base64
-              const data = Buffer.from(imageBuffer).toString('base64');
-              const url = `data:${contentType};base64,${data}`;
-    return url;
- })
-}
-    const tableName = process.env.TABLE_NAME!;
+
+const client = new DynamoDBClient({});
+const dynamodb = DynamoDBDocumentClient.from(client);
+const tableName = process.env.TABLE_NAME!;
 
 
 export const SyncProducts = async () => {
@@ -66,20 +52,12 @@ export const SyncProducts = async () => {
         console.error("Skipping product with missing id:", product);
         continue;
       }
-      const backupImage = "https://placehold.co/300x200?text=No+Image";
-
-      const item = {
-        ...product,
-        photo: await getProductImage(product.id, accessToken)
-          .then((url) => url || backupImage)
-          .catch(() => backupImage),
-      };
 
       try {
         await dynamodb.send(
           new PutCommand({
             TableName: tableName,
-            Item: item,
+            Item: product,
           })
         );
       } catch (err) {

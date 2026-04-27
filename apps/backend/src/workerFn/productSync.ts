@@ -13,9 +13,10 @@ export const SyncProducts = async () => {
   try {
     const accessToken = await zoho.getAccessToken();
     const bearerToken = `Zoho-oauthtoken ${accessToken}`;
+    const fields = keys
 
     const url =
-      "https://www.zohoapis.com/bigin/v2/Products?per_page=200&fields=id,Product_Name,Unit_Price,Description";
+      "https://www.zohoapis.com/bigin/v2/Products?per_page=200&fields=id,Product_Name,Unit_Price,Description,Image,Size,Product_Category";
 
     console.log("Fetching Zoho products ...");
 

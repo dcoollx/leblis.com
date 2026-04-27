@@ -6,26 +6,18 @@ import {
   PutCommand,
   ScanCommand,
 } from "@aws-sdk/lib-dynamodb";
+import { ZOHOProduct } from "./zoho";
 export const productsHandler = async (
   req: APIGatewayProxyEventV2,
   _: Context,
   method: HTTPMethods
 ) => {
-  type ZOHOProduct = {
-    Product_Name: string;
-    id: string;
-    Unit_Price: number;
-    Product_Active?: boolean;
-    Product_Code?: string;
-    Modified_Time?: string;
-    $taxable?: boolean;
-  };
   const client = new DynamoDBClient({});
   const dynamodb = DynamoDBDocumentClient.from(client);
 
   const AddProduct = async (
     tableName: string,
-    product: ZOHOProduct & { photo: string }
+    product: ZOHOProduct
   ) => {
     await dynamodb.send(
       new PutCommand({
@@ -40,14 +32,14 @@ export const productsHandler = async (
     const result = await dynamodb.send(
       new ScanCommand({ TableName: tableName })
     );
-    return result.Items;
+    return result.Items as ZOHOProduct[] | undefined;
   };
 
   if (method === "GET") {
     try {
       const products = await getProducts(tableName);
 
-      return respond(200, products);
+      return respond(200, products ?? []);
     } catch (error) {
       console.error("Error fetching products:", error);
       return respond(500, { message: "Error fetching products" });

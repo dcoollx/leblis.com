@@ -20,11 +20,16 @@ aws cloudformation deploy \
     ZOHOCLIENTSECRET="$ZOHO_CLIENT_SECRET" \
     ZOHOACCESSTOKEN="$ZOHO_ACCESS_TOKEN" \
     ZOHOREFRESHTOKEN="$ZOHO_REFRESH_TOKEN" \
+    STRIPESECRETKEY="$STRIPE_SECRET_KEY" \
   --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
 
 
 # capture lambda function url from stack then update frontend config with it
-export VITE_API_URL=$(aws cloudformation describe-stacks --stack-name "$Site-stack" --query "Stacks[0].Outputs[?OutputKey=='LambdaAPIUrl'].OutputValue" --output text)  
+export VITE_API_URL=$(aws cloudformation describe-stacks --stack-name "$Site-stack" --query "Stacks[0].Outputs[?OutputKey=='LambdaAPIUrl'].OutputValue" --output text)
+
+# create stripe webhooks ( requires VITE_API_URL)
+npx tsx ./infra/webhooks.mts
+
 echo aws cloudformation describe-stacks --stack-name "$Site-stack" --query "Stacks[0].Outputs[?OutputKey=='Nameservers'].OutputValue" --output text  
   #upload site to s3 bucket
 cd apps/frontend && npm run build
@@ -33,23 +38,11 @@ aws s3 rm s3://"$Site-stack-hosting-bucket" --recursive
 
 aws s3 sync dist/ s3://"$Site-stack-hosting-bucket" --delete 
 
-#call update function to populate products on first deploy
-curl -X POST "$VITE_API_URL"update"
+# invalidate cache
+echo invalidating cache
+export DIST_ID=$(aws cloudformation describe-stacks --stack-name "$Site-stack" --query "Stacks[0].Outputs[?OutputKey=='DistributionID'].OutputValue" --output text)
+echo $DIST_ID
+aws cloudfront create-invalidation --distribution-id "$DIST_ID" --paths "/*"
 
-## set up notification for change in products to hit the lambda function update url.
-#need a new scope for this: ZohoBigin.notifications.ALL
-export tempToken=$(curl -sSX POST "https://accounts.zoho.com/oauth/v2/token?refresh_token=$ZOHO_REFRESH_TOKEN&client_id=$ZOHO_CLIENT_ID&client_secret=$ZOHO_CLIENT_SECRET&grant_type=refresh_token" -H "Content-Type: application/x-www-form-urlencoded" | jq -r '.access_token')
-curl -X POST https://zohoapis.com/bigin/v2/actions/watch \
-  -H "Authorization: Zoho-oauthtoken $tempToken" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "watch": [
-       {
-            "channel_id": "$Site",
-            "events": [
-                "Products.all"
-            ],
-            "token": "${Site}",
-            "notify_url": "'$VITE_API_URL'update"
-        }]
-      }'
+#call update function to populate products on first deploy
+curl -X PUT "$VITE_API_URL"products"

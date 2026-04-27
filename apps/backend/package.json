@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "AWS Lambda functions",
   "main": "dist/index.js",
+  "type": "module",
   "scripts": {
-    "build": "tsc",
+    "start": "cross-env LOCAL=true tsx watch ./src/tests/local.ts",
+    "prebuild": "tsc --noEmit",
+    "build": "rm -rf dist && esbuild src/worker.ts src/index.ts --bundle --external:@aws-sdk/* --external:/opt/nodejs/* --platform=node --format=esm --out-extension:.js=.mjs --target=node22 --outdir=dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -12,12 +15,17 @@
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.490.0",
+    "@aws-sdk/client-lambda": "^3.1037.0",
     "@aws-sdk/lib-dynamodb": "^3.1030.0",
     "aws-lambda": "^1.0.7"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.130",
+    "@types/express": "^5.0.6",
     "@types/node": "^20.19.39",
+    "esbuild": "^0.25.12",
+    "express": "^5.2.1",
+    "stripe": "^22.0.2",
     "typescript": "^5.3.3"
   }
 }

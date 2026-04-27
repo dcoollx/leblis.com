@@ -1,5 +1,6 @@
 import axios, { type AxiosInstance } from 'axios';
 import type { ZohoContact, ZohoProduct } from './Zoho.types';
+import { CartDetails } from 'use-shopping-cart/core';
 
 const envVarDefined = (vars: string[]): boolean => {
     return vars.every((v) => { 
@@ -34,5 +35,8 @@ export class ZohoClient {
     }
       async getProducts(): Promise<ZohoProduct[]> {
         return this.axiosInstance.get('/products').then((response) => response.data); // only gets first 200 products
+    }
+    async getShoppingCartSession(cartDetails: CartDetails): Promise<{ sessionUrl: string, id: string }> {
+        return this.axiosInstance.post('/checkout', { cartDetails }).then((response) => response.data);
     }
 }

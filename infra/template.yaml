@@ -23,11 +23,15 @@ Parameters:
   ZOHOREFRESHTOKEN:
     Type: String
     NoEcho: true
+  STRIPESECRETKEY:
+    Type: String
+    NoEcho: true
 
 Conditions:
   EnableCustomDomain: !Equals [ !Ref UseCustomDomain, "true" ]
 
 Resources:
+  #------------ roles
   # --- DNS & SSL RESOURCES ---
 
   # 1. Route 53 Hosted Zone (You will get Nameservers from this to put in IONOS)
@@ -163,6 +167,26 @@ Resources:
         - AttributeName: id
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST
+  
+  WorkerLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-worker
+      Handler: worker.handler
+      Runtime: nodejs20.x
+      Timeout: 60
+      CodeUri: ../apps/backend/dist/
+      Environment:
+        Variables:
+          STRIPE_SECRET_KEY: !Ref STRIPESECRETKEY
+          ZOHO_CLIENT_ID: !Ref ZOHOCLIENTID
+          ZOHO_CLIENT_SECRET: !Ref ZOHOCLIENTSECRET
+          ZOHO_ACCESS_TOKEN: !Ref ZOHOACCESSTOKEN
+          ZOHO_REFRESH_TOKEN: !Ref ZOHOREFRESHTOKEN
+          TABLE_NAME: !Ref DataTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DataTable 
 
   APIFunction:
     Type: AWS::Serverless::Function
@@ -171,22 +195,34 @@ Resources:
       Runtime: nodejs20.x
       Handler: index.handler
       CodeUri: ../apps/backend/dist/
+      Layers:
+        - !ImportValue CommonLayerArn
       FunctionUrlConfig:
         AuthType: NONE
       Environment:
         Variables:
+          WORKER_ARN: !GetAtt WorkerLambda.Arn
+          DOMAIN: !Ref DomainName
           ZOHO_CLIENT_ID: !Ref ZOHOCLIENTID
           ZOHO_CLIENT_SECRET: !Ref ZOHOCLIENTSECRET
           ZOHO_ACCESS_TOKEN: !Ref ZOHOACCESSTOKEN
           ZOHO_REFRESH_TOKEN: !Ref ZOHOREFRESHTOKEN
-          TABLE_NAME: !Ref DataTable 
+          STRIPE_SECRET_KEY: !Ref STRIPESECRETKEY
+          TABLE_NAME: !Ref DataTable
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref DataTable
+        - Statement:
+            - Effect: Allow
+              Action: lambda:InvokeFunction
+              Resource: !GetAtt WorkerLambda.Arn 
 
 Outputs:
   CloudFrontURL:
     Value: !GetAtt WebsiteDistribution.DomainName
+    
+  DistributionID:
+    Value: !GetAtt WebsiteDistribution.Id
   
   Nameservers:
     Description: "Copy these 4 values into your IONOS Nameserver settings"

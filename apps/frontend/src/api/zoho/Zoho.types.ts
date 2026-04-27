@@ -25,9 +25,13 @@ export interface ZohoContact {
 }
 
 export interface ZohoProduct {
-               Product_Name: string,
-               Product_Code?: string,
-               Description: string,
-               Unit_Price: number,
-               Image?: string,
+	Image: string
+    Product_Name: string,
+    Product_Code?: string,
+    Description: string,
+    Unit_Price: number,
+	id: string,
+	Size: number,
+	Full_Description?: string,
+	Quantity_in_Stock: number
 }

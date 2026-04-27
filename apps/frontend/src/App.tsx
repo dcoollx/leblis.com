@@ -5,6 +5,7 @@ import { CartProvider } from 'use-shopping-cart'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router';
 import { Checkout } from "./pages/Checkout";
 import { Success } from "./pages/Success";
+import { Product } from "./pages/Product";
 
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/success" element={<Success/>} />
+            <Route path="/product/:productId" element={<Product/>} />
             <Route path="*" element={<Navigate to="/"/>} />
           </Routes>
         </Router>

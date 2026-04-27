@@ -1,13 +1,10 @@
-import { ZohoProduct } from "../api/zoho/Zoho.types";
 import { useGetProducts } from "../hooks/useGetProducts";
 import { ProductCard } from "./ProductCard";
-import { useShoppingCart, formatCurrencyString } from 'use-shopping-cart'
 import { Skeleton } from "./ui/skeleton";
 
 
   export const ProductList = () => {
     let { data: products, isLoading } = useGetProducts();
-    const { addItem } = useShoppingCart();
     if (isLoading) {
       return <Skeleton className="w-full h-64" />;
     }
@@ -17,34 +14,9 @@ import { Skeleton } from "./ui/skeleton";
     console.log(products, 'products');
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-        {products.map((product: ZohoProduct) => (
-        <a role="button"  key={product.id} onClick={(_)=>{
-          addItem({
-            id: product.id,
-            name: product.Product_Name,
-            price: Number(product.Unit_Price) * 100, // use-shopping-cart expects price in cents
-            description: product.Description,
-            sku: product.id,
-            currency: 'USD',
-            product_data: {
-              zoho_product_id: product.id
-            },
-            metadata: {
-              zoho_product_id: product.id
-            }
-          },{
-            count: 1,
-            product_metadata: {
-                zoho_product_id: product.id
-            }
-          })
-        }}>
-          <ProductCard
-            name={product.Product_Name}
-            price={formatCurrencyString({ value: product.Unit_Price * 100, currency: 'USD' })}
-            image={product.Image ?? 'https://placehold.co/300x200?text=No+Image'}
-            description={product.Description}
-          />
+        {products.map((product) => (
+        <a href={`/product/${product.id}`}  key={product.id} >
+          <ProductCard product={product} />
           </a>
         ))}
       </div>

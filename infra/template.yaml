@@ -195,8 +195,6 @@ Resources:
       Runtime: nodejs20.x
       Handler: index.handler
       CodeUri: ../apps/backend/dist/
-      Layers:
-        - !ImportValue CommonLayerArn
       FunctionUrlConfig:
         AuthType: NONE
       Environment:

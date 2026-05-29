@@ -10,6 +10,8 @@ import { useState } from "react"
 import { ImageWithFallback } from "../components/figma/ImageWithFallback"
 import { Star, Truck, MapPin, ChevronRight } from "lucide-react"
 import { Card, CardContent } from "../components/ui/card"
+import { Footer } from "../components/Footer"
+import { Header } from "../components/Header"
 
 export const Product = () =>{
     const { productId } = useParams()
@@ -36,7 +38,7 @@ export const Product = () =>{
     }
 
     const sizes = ["Small", "Medium", "Large", "Extra Large"] // Assuming predefined sizes
-    const inventory = product.Inventory ?? 10 // Default inventory if not set
+    const inventory = product.Quantity_in_Stock ?? 10 // Default inventory if not set
     const isOutOfStock = inventory === 0
 
     // Mock related products - in real app, fetch similar products
@@ -76,20 +78,7 @@ export const Product = () =>{
 
     return (
         <div className="min-h-screen bg-[#f5f3f0] text-[#2a2825]">
-            {/* Header */}
-            <header className="border-b border-[#e6e1dc] bg-white/95 backdrop-blur-sm">
-                <div className="max-w-6xl mx-auto px-4 py-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                    <div>
-                        <button onClick={() => nav('/')} className="text-xl font-semibold tracking-tight text-[#2a2825] hover:text-[#2a2825]/80">
-                            Leblis
-                        </button>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-[#2a2825]">
-                        <button onClick={() => nav('/')} className="hover:text-[#2a2825]/80">Home</button>
-                        <button className="hover:text-[#2a2825]/80">Cart</button>
-                    </div>
-                </div>
-            </header>
+            <Header />
 
             {/* Breadcrumb */}
             <div className="max-w-6xl mx-auto px-4 py-6">
@@ -212,22 +201,33 @@ export const Product = () =>{
                                         Add to Bag
                                     </Button>
                                 )}
+                                                    <div style={{ marginBottom: '15px'}}>
+                        <p className="text-sm text-[#2a2825]/80">Notify Me When this product is back in Stock</p>
+                        <div className="mt-4 flex flex-col sm:flex-row gap-3">
+                            <Input
+                                type="email"
+                                placeholder="Your email"
+                                className="flex-1 h-12 rounded-2xl bg-[#f5f3f0] border-[#d8d3cd] text-[#2a2825]"
+                            />
+                            <Button className="h-12 rounded-2xl bg-[#2a2825] text-white hover:bg-[#1f1c1a]">Subscribe</Button>
+                        </div>
+                    </div>
 
                                 <div className="space-y-4 border-t border-[#d8d3cd] pt-8">
                                     <div className="flex items-center gap-3">
                                         <Truck className="w-5 h-5 text-[#2a2825]" />
                                         <div>
                                             <p className="font-semibold text-[#2a2825]">Shipping</p>
-                                            <p className="text-sm text-[#2a2825]/80">Free shipping on orders over $50</p>
+                                            <p className="text-sm text-[#2a2825]/80">Free shipping on orders over $75</p>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-3">
+                                    {/* <div className="flex items-center gap-3">
                                         <MapPin className="w-5 h-5 text-[#2a2825]" />
                                         <div>
                                             <p className="font-semibold text-[#2a2825]">Pickup</p>
                                             <p className="text-sm text-[#2a2825]/80">Check availability at nearby stores</p>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -269,7 +269,7 @@ export const Product = () =>{
                         )}
                         {activeTab === 'usage' && (
                             <div>
-                                <p className="text-[#2a2825]">Light the wick and enjoy the fragrance for up to 45 hours of burn time.</p>
+                                <p className="text-[#2a2825]">Apply liberally after a shower to moisterize skin and apply scent</p>
                             </div>
                         )}
                         {activeTab === 'ingredients' && (
@@ -307,36 +307,7 @@ export const Product = () =>{
                 )}
             </main>
 
-            <footer className="border-t border-[#e6e1dc] bg-white py-12">
-                <div className="max-w-6xl mx-auto px-4 grid gap-12 md:grid-cols-3">
-                    <div>
-                        <p className="text-lg font-semibold text-[#2a2825] mb-3">About Leblis</p>
-                        <p className="text-sm text-[#2a2825]/80 leading-relaxed">
-                            Curated home essentials with a clean, elevated aesthetic. Find charming pieces designed for daily comfort.
-                        </p>
-                    </div>
-                    <div>
-                        <p className="text-lg font-semibold text-[#2a2825] mb-3">Customer Care</p>
-                        <ul className="space-y-2 text-sm text-[#2a2825]/80">
-                            <li className="hover:text-[#2a2825] cursor-pointer">Shipping</li>
-                            <li className="hover:text-[#2a2825] cursor-pointer">Returns</li>
-                            <li className="hover:text-[#2a2825] cursor-pointer">Contact</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <p className="text-lg font-semibold text-[#2a2825] mb-3">Get in touch</p>
-                        <p className="text-sm text-[#2a2825]/80">Sign up for offers, new arrivals, and exclusive deals.</p>
-                        <div className="mt-4 flex flex-col sm:flex-row gap-3">
-                            <Input
-                                type="email"
-                                placeholder="Your email"
-                                className="flex-1 h-12 rounded-2xl bg-[#f5f3f0] border-[#d8d3cd] text-[#2a2825]"
-                            />
-                            <Button className="h-12 rounded-2xl bg-[#2a2825] text-white hover:bg-[#1f1c1a]">Subscribe</Button>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+            <Footer />
         </div>
     )
 }

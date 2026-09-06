@@ -42,7 +42,7 @@ export const createDeal = async (deal: ZOHODeal, token?: string) => {
         if(res.ok)
             return res.json()
         else
-            throw new Error(`${res.status}: ${res.statusText}`)
+            throw new Error(`${res.status}: ${res.statusText}, ${JSON.stringify(res)}`)
     })
 }
 

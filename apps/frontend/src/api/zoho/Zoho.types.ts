@@ -25,7 +25,7 @@ export interface ZohoContact {
 }
 
 export interface ZohoProduct {
-	Image: string
+	IMG_URL: string
     Product_Name: string,
     Product_Code?: string,
     Description: string,

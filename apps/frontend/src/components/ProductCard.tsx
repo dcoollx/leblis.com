@@ -8,7 +8,7 @@ interface ProductCardProps {
   product: ZohoProduct
 }
 
-export function ProductCard({ product: { Product_Name, Unit_Price, Image, Description, id } }: ProductCardProps) {
+export function ProductCard({ product: { Product_Name, Unit_Price, IMG_URL: Image, Description, id } }: ProductCardProps) {
   const { addItem } = useShoppingCart();
   
   return (
